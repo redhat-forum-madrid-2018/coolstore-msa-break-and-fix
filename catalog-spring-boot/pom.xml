@@ -9,8 +9,8 @@
   <name>CoolStore Catalog Service</name>
   <description>CoolStore Catalog Service with Spring Boot</description>
   <properties>
-    <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
-    <spring-boot.bom.version>1.5.10.SP2-redhat-2</spring-boot.bom.version>
+    <spring-boot.version>1.5.15.RELEASE</spring-boot.version>
+    <spring-boot.bom.version>1.5.15.Final-redhat-00002</spring-boot.bom.version>
     <spring.k8s.bom.version>0.2.0.RELEASE</spring.k8s.bom.version>
     <k8s.client.version>3.1.10</k8s.client.version>
     <fabric8.maven.plugin.version>3.5.40</fabric8.maven.plugin.version>
@@ -119,14 +119,14 @@
         </executions>
         <configuration>
           <resources>
-              <labels>
-                  <all>
-                      <property>
-                          <name>app</name>
-                          <value>catalog</value>
-                      </property>
-                  </all>
-              </labels>
+            <labels>
+              <all>
+                <property>
+                  <name>app</name>
+                  <value>catalog</value>
+                </property>
+              </all>
+            </labels>
           </resources>
           <generator>
             <includes>
@@ -134,7 +134,7 @@
             </includes>
             <config>
               <spring-boot>
-                <from>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.4</from>
+                <from>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.2</from>
               </spring-boot>
             </config>
           </generator>
