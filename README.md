@@ -102,6 +102,21 @@ $ curl http://gateway-coolstore.$(minishift ip).nip.io/api/products | jq
 ]
 ```
 
+Hystrix Dashboard lets you easily monitor the health of your services in real time by aggregating Hystrix metrics 
+data from an event stream and displaying them on one screen.
+
+```
+$ oc create -f https://raw.githubusercontent.com/snowdrop/openshift-templates/master/hystrix-dashboard/hystrix-dashboard.yml
+template "hystrix-dashboard" created
+$ oc new-app --template=hystrix-dashboard
+```
+
+To access to the dashboard:
+
+http://hystrix-dashboard-coolstore.$(minishift ip).nip.io/
+
+http://gateway:8080/hystrix.stream
+
 ## Web Site - Rich User Experience with Node.js and AngularJS
 
 **TODO** Add description and main Node.js and AngularJS features
