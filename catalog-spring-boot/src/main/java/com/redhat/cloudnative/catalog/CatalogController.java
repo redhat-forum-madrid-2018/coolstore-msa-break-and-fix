@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/api/catalog")
 public class CatalogController {
 
-	  @Autowired
+	@Autowired
     private ProductRepository repository;
 
     @ResponseBody
@@ -25,4 +25,5 @@ public class CatalogController {
         Spliterator<Product> products = repository.findAll().spliterator();
         return StreamSupport.stream(products, false).collect(Collectors.toList());
     }
+    
 }
