@@ -11,6 +11,8 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "PRODUCT", uniqueConstraints = @UniqueConstraint(columnNames = "itemId"))
 public class Product implements Serializable {
 	
+	private static final long serialVersionUID = 6885320529233735430L;
+
 	@Id
 	private String itemId;
 	
@@ -59,4 +61,5 @@ public class Product implements Serializable {
 	public String toString() {
 		return "Product [itemId=" + itemId + ", name=" + name + ", price=" + price + "]";
 	}
+	
 }
