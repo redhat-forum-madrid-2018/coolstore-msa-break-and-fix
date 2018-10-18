@@ -135,6 +135,15 @@ Testing from a Web Browser [http://web-ui-coolstore.$(minishift ip).nip.io](http
 
 ![](images/rh-coolstore-msa-app.png?raw=true)
 
+# Deploy using an OpenShift Template
+
+There is an OpenShift Template to deploy all this repository easily. 
+
+```
+$ oc new-project coolstore
+$ oc process -f openshift/coolstore-msa-break-fix-template.yaml | oc create -f -
+```
+
 # Main References
 
 This repository is based in other cool repositories as:
