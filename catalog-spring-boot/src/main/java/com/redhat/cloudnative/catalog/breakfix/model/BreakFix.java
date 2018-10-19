@@ -9,9 +9,11 @@ public class BreakFix implements Serializable {
 	public static final int NO_DELAY = 0;
 
 	public static enum Status {
-		OK, BROKEN, DELAYED;
+		OK, BROKEN, DELAYED, NOT_READY;
 	}
 
+	private boolean ready = true;
+	
 	private int delay = NO_DELAY;
 
 	private String brokenMessage;
@@ -34,6 +36,10 @@ public class BreakFix implements Serializable {
 	public void setBrokenMessage(String msg) {
 		this.brokenMessage = msg;
 	}
+	
+	public void disabled() {
+		this.ready = false;
+	}
 
 	public Status getStatus() {
 		if (this.delay != NO_DELAY) {
@@ -43,15 +49,20 @@ public class BreakFix implements Serializable {
 		if (null != this.brokenMessage) {
 			return Status.BROKEN;
 		}
+		
+		if (!ready) {
+			return Status.NOT_READY;
+		}
 
 		return Status.OK;
 	}
 
 	@Override
 	public String toString() {
-		return "BreakFix [delay='" + delay 
-					+ "', brokenMessage='" + brokenMessage 
-					+ "', status='" + getStatus() + "']'";
+		return "BreakFix [delay='" + delay + 
+				"', brokenMessage='" + brokenMessage + 
+				"', ready='" + ready + 
+				"', status='" + getStatus() + "']'";
 	}
 
 }

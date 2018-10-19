@@ -44,6 +44,12 @@ public class BreakFixService {
 
 		return this.breakFix;
 	}
+	
+	public BreakFix disabling() {
+		this.breakFix.disabled();
+
+		return this.breakFix;
+	}
 
 	public BreakFix.Status getStatus() {
 		return this.breakFix.getStatus();
