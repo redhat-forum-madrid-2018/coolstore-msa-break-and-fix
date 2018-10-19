@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
@@ -25,8 +26,14 @@ public class BreakFixResource {
 	@GET
 	@Path("/api/break/status")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BreakFix.Status breakSleep() {
-		return this.breakFixService.getStatus();
+	public Response status() {
+		BreakFix.Status breakFixStatus = this.breakFixService.getStatus();
+		
+		if (BreakFix.Status.NOT_READY.equals(breakFixStatus)) {
+			return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(breakFixStatus).build();
+		}
+		
+		return Response.status(Response.Status.OK).entity(breakFixStatus).build();
 	}
 	
 	@GET
@@ -63,6 +70,15 @@ public class BreakFixResource {
 		LOGGER.infov("[FIX] Application fixed. No throwing exceptions for each request");
 		
 		return this.breakFixService.fixBreaking();
+	}
+	
+	@GET
+	@Path("/api/break/disabled")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BreakFix disabled() {
+		LOGGER.error("[BREAK] Application not ready. You should redeploy a new version.");
+
+		return this.breakFixService.disabling();
 	}
 	
 }
