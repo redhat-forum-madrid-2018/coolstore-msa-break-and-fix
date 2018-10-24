@@ -198,6 +198,7 @@ objects:
     labels:
       app: hystrix-dashboard
       template: hystrix-dashboard
+      version: 1.0.0-SNAPSHOT
     name: hystrix-dashboard
   spec:
     replicas: 0
@@ -337,6 +338,7 @@ objects:
   metadata:
     labels:
       app: web-ui
+      version: 1.0.0-SNAPSHOT
     name: web-ui
   spec:
     replicas: 1
@@ -580,6 +582,7 @@ objects:
   metadata:
     labels:
       app: hystrix-dashboard
+      version: 1.0.0-SNAPSHOT
     name: hystrix-dashboard
   spec:
     to:
@@ -660,10 +663,11 @@ objects:
   metadata:
     labels:
       app: hystrix-dashboard
+      version: 1.0.0-SNAPSHOT
     name: hystrix-dashboard
   spec:
     ports:
-    - name: 8080-tcp
+    - name: http
       port: 8080
       protocol: TCP
       targetPort: 8080
@@ -694,10 +698,11 @@ objects:
   metadata:
     labels:
       app: web-ui
+      version: 1.0.0-SNAPSHOT
     name: web-ui
   spec:
     ports:
-    - name: 8080-tcp
+    - name: http
       port: 8080
       protocol: TCP
       targetPort: 8080
