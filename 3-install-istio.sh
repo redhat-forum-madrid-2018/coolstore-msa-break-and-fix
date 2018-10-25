@@ -3,11 +3,6 @@
 # Environment
 . ./0-environment.sh
 
-# Login
-eval $(minishift oc-env)
-eval $(minishift docker-env)
-oc login $(minishift ip):8443 -u admin -p admin
-
 # Download istio
 curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-${OS}.tar.gz | tar xz
 

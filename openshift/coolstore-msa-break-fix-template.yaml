@@ -614,7 +614,7 @@ objects:
     name: web-ui
   spec:
     port:
-      targetPort: 8080-tcp
+      targetPort: http
     to:
       kind: Service
       name: web-ui
