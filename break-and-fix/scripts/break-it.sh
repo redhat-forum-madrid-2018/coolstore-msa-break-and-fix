@@ -18,8 +18,7 @@
 
 # TODO Define as arguments of this service
 # OCP Environment
-# OCP_BASE_URL="coolstore.$(minishift ip).nip.io"
-OCP_BASE_URL=${1:-"coolstore.127.0.0.1.nip.io"}
+OCP_BASE_URL=${1:-"coolstore.$(minishift ip).nip.io"}
 TIMEOUT=${2:-4000}
 EXCEPTION_MSG=${3:-"Opps.%20Please,%20Redeploy%20me!!!"}
 
@@ -31,15 +30,15 @@ BREAK_TYPE_LIST=("sleep/$TIMEOUT" "exception/$EXCEPTION_MSG" "disabled")
 RANDOM=$$$(date +%s)
 
 # Generating Break Url
-service=${SERVICE_LIST[$RANDOM % ${#SERVICE_LIST[@]}]}
-break_type=${BREAK_TYPE_LIST[$RANDOM % ${#BREAK_TYPE_LIST[@]}]}
-ocp_break_url="http://$service-$OCP_BASE_URL/api/break/$break_type"
+SERVICE=${SERVICE_LIST[$RANDOM % ${#SERVICE_LIST[@]}]}
+BREAK_TYPE=${BREAK_TYPE_LIST[$RANDOM % ${#BREAK_TYPE_LIST[@]}]}
+OCP_BREAK_URL="http://$SERVICE-$OCP_BASE_URL/api/break/$BREAK_TYPE"
 
-echo "Breaking '$service' with '$break_type'"
-echo "OCP Break Url: $ocp_break_url"
+echo "Breaking '$SERVICE' with '$BREAK_TYPE'"
+echo "OCP Break Url: $OCP_BREAK_URL"
 
 # Invoking service
-HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}\n" $ocp_break_url)
+HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}\n" $OCP_BREAK_URL)
 # extract the body
 HTTP_BODY=$(echo $HTTP_RESPONSE | sed -e 's/HTTPSTATUS\:.*//g')
 # extract the status

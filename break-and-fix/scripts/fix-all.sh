@@ -13,26 +13,23 @@
 # http://inventory-coolstore.$(minishift ip).nip.io/api/fix/exception
 
 # OCP Environment
-# OCP_BASE_URL="coolstore.$(minishift ip).nip.io"
-OCP_BASE_URL=${1:-"coolstore.127.0.0.1.nip.io"}
+OCP_BASE_URL=${1:-"coolstore.$(minishift ip).nip.io"}
 
 # Service and Fix Type
 SERVICE_LIST=("catalog" "inventory")
 FIX_TYPE_LIST=("sleep" "exception")
 
 for i_service in {0..1}; do
-  service=${SERVICE_LIST[$i_service]}
-  echo "Fixing '$service'"
+  SERVICE=${SERVICE_LIST[$i_service]}
+  echo "Fixing '$SERVICE'"
 
   for i_fix in {0..1}; do
-    fix_type=${FIX_TYPE_LIST[$i_fix]}
+    FIX_TYPE=${FIX_TYPE_LIST[$i_fix]}
 
-    ocp_fix_url="http://$service-$OCP_BASE_URL/api/fix/$fix_type"
-
-    # echo "OCP Fix Url: $ocp_fix_url"
+    OCP_FIX_URL="http://$SERVICE-$OCP_BASE_URL/api/fix/$FIX_TYPE"
 
     # Invoking service
-    HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}\n" $ocp_fix_url)
+    HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}\n" $OCP_FIX_URL)
     # extract the body
     HTTP_BODY=$(echo $HTTP_RESPONSE | sed -e 's/HTTPSTATUS\:.*//g')
     # extract the status
