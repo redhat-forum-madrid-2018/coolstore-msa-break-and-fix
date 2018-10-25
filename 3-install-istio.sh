@@ -10,11 +10,11 @@ cd istio-${ISTIO_VERSION}
 export ISTIO_HOME=`pwd`
 export PATH=$ISTIO_HOME/bin:$PATH
 
-kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+oc apply -f install/kubernetes/helm/istio/templates/crds.yaml
 
-kubectl apply -f install/kubernetes/istio-demo.yaml
+oc apply -f install/kubernetes/istio-demo.yaml
 
-kubectl config set-context $(kubectl config current-context) --namespace=istio-system
+oc project istio-system
 
 oc expose svc istio-ingressgateway
 oc expose svc servicegraph
