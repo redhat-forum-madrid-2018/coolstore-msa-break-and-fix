@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export PROJECT_NAME="coolstore"
+# Environment
+. ./0-environment.sh
 
 oc new-project ${PROJECT_NAME}
 

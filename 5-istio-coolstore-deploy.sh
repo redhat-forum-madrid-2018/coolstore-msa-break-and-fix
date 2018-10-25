@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Environment
-. ./0-env.sh
+. ./0-environment.sh
 
 ISTIO_HOME=${PWD}/istio-${ISTIO_VERSION}
 

@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Environment
-ISTIO_VERSION=1.0.2
-OS="osx" # osx | linux
+. ./0-environment.sh
 
 # Login
 eval $(minishift oc-env)
