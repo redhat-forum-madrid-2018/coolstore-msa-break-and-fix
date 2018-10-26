@@ -13,7 +13,7 @@ SERVICE_LIST=("catalog" "inventory")
 
 for i_service in {0..1}; do
   SERVICE=${SERVICE_LIST[$i_service]}
-  echo "Status '$service' service"
+  echo "Status '$SERVICE' service"
 
     OCP_STATUS_URL="http://$SERVICE-$OCP_BASE_URL/api/break/status"
 
@@ -31,3 +31,4 @@ for i_service in {0..1}; do
       # oc rollout latest "dc/$service"
     fi
 done
+
