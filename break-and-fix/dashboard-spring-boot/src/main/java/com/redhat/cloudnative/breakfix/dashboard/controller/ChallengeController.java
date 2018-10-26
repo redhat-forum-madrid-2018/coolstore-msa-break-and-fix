@@ -57,12 +57,12 @@ public class ChallengeController {
 	@Value("${inventory.break.disabled}")
 	private String inventoryBreakDisabledEndpoint;
 
-	@Value("${minishift.ip}")
-	private String minishiftIp;
+	@Value("${openshift.base_url}")
+	private String openshiftBaseUrl;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/signin", method = RequestMethod.GET)
 	public ModelAndView welcome(ModelMap model) {
-		return new ModelAndView("index", "competitor", new Competitor());
+		return new ModelAndView("signin", "competitor", new Competitor());
 	}
 
 	@RequestMapping(value = "/start", method = RequestMethod.POST)
@@ -79,7 +79,7 @@ public class ChallengeController {
 		String service = services[(new Random()).nextInt(1)];
 		String breakType = breakTypes[(new Random()).nextInt(2)];		
 		
-		String breakUrl = "http://" + service + "-coolstore." + minishiftIp + ".nip.io/api/break/" + breakType;
+		String breakUrl = "http://" + service + "-coolstore." + openshiftBaseUrl + "/api/break/" + breakType;
 
 		// TODO Manage exceptions
 		BreakFix breakFix = restTemplate.getForObject(breakUrl, BreakFix.class);
