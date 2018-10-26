@@ -1,0 +1,1 @@
+oc delete all,secrets,sa,templates,configmaps,deployments,clusterroles,clusterrolebindings,virtualservices,destinationrules --selector=app=customer -n tutorial
