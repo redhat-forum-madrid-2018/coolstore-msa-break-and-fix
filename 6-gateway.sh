@@ -19,12 +19,6 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    hosts:
-    - "*"
 EOF
 
 cat <<EOF | oc apply -n ${PROJECT_NAME} -f -
@@ -43,13 +37,15 @@ spec:
         prefix: /api
     route:
     - destination:
+        host: gateway.${PROJECT_NAME}.svc.cluster.local
         port:
           number: 8080
-        host: gateway.${PROJECT_NAME}.svc.cluster.local
         subset: 1.0.0-SNAPSHOT
   - route:
     - destination:
         host: web-ui.${PROJECT_NAME}.svc.cluster.local
+        port:
+          number: 8080
         subset: 1.0.0-SNAPSHOT
 EOF
 
