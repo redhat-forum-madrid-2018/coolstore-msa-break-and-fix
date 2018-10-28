@@ -1,6 +1,7 @@
 package com.redhat.cloudnative.breakfix.dashboard.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -93,6 +94,11 @@ public class Competitor implements Serializable {
 
 	public void setTime(long time) {
 		this.time = time;
+	}
+	
+	public String getTimeFormatted() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+		return simpleDateFormat.format(this.time);
 	}
 
 	@Override
