@@ -10,6 +10,5 @@ tmp/
 .project
 .DS_Store
 bower_components/
-node_modules/
 .vscode/
 /.tern-project
