@@ -8,7 +8,7 @@
   "description": "Red Hat Forum 2018 Break and Fix Dashboard",
   "homepage": "https://github.com/redhat-forum-madrid-2018/coolstore-msa-break-and-fix.git",
   "dependencies": {
-    "break-and-fix-dashboard": "file:src/main/resources/static"
+    "break-and-fix-dashboard": "file:./src/main/resources/static"
   },
   "devDependencies": {
     "patternfly": "^3.55.0"
