@@ -14,7 +14,7 @@ oc apply -f install/kubernetes/helm/istio/templates/crds.yaml
 
 oc apply -f install/kubernetes/istio-demo.yaml
 
-oc project istio-system
+oc project ${ISTIO_PROJECT_NAME}
 
 oc expose svc istio-ingressgateway
 oc expose svc servicegraph
