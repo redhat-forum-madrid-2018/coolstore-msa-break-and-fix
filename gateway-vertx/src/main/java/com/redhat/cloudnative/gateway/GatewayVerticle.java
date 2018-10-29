@@ -33,7 +33,7 @@ public class GatewayVerticle extends AbstractVerticle {
         circuit = CircuitBreaker.create("inventory-circuit-breaker", vertx,
             new CircuitBreakerOptions()
                 .setFallbackOnFailure(true)
-                .setMaxFailures(3)
+                .setMaxFailures(8)
                 .setResetTimeout(5000)
                 .setTimeout(1000)
         );
