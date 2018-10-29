@@ -123,18 +123,46 @@ $ curl http://inventory-coolstore.$(minishift ip).nip.io/api/fix/exception | jq
 }
 ```
 
+Disabling the application:
 
-# Running
+```
+$ curl http://inventory-coolstore.$(minishift ip).nip.io/api/break/disabled | jq
+{
+  "delay": 0,
+  "brokenMessage": null,
+  "status": "NOT_READY"
+}
+```
 
-oc run web-load --restart='OnFailure' --image=siamaksade/siege -- -c4 -d2 -t5M -v http://web-ui:8080/
+# Load Services
 
--c: concurrent users
--d: delay
--t: time 
+There is a script to execute some pods to load some request during some time. This file is located at [./scripts/run-load.sh](./scripts/run-load.sh).
 
-oc run siege-load-web-ui --restart='OnFailure' --image=siamaksade/siege -- -c4 -d2 -t10M http://web-ui:8080
+Basically it is created some pods to execute some API endpoints as:
 
-oc run siege-load-gateway --restart='OnFailure' --image=siamaksade/siege -- -c4 -d2 -t10M -v http://gateway:8080/api/products
+```
+oc run siege-load-gateway -n coolstore --restart='OnFailure' --image=siamaksade/siege \
+  -- -c4 -d2 -t10M -v http://gateway-coolstore.$(minishift ip).nip.io/api/products
 
+oc run siege-load-catalog -n coolstore --restart='OnFailure' --image=siamaksade/siege \
+  -- -c4 -d2 -t10M -v http://catalog-coolstore.$(minishift ip).nip.io/api/catalog
 
-add scripts to manipulate locally pods when the broker is not available
+oc run siege-load-inventory -n coolstore --restart='OnFailure' --image=siamaksade/siege \
+  -- -c4 -d2 -t10M -v http://inventory-coolstore.$(minishift ip).nip.io/api/inventory/329299
+```
+
+# Install Break and Fix Dashboard
+
+Break and Fix Dashboard allows you to play with this repo:
+
+1.- Describe the challenge
+2.- Starting a challenge
+3.- Review the hall of fame
+
+To install it:
+
+```
+$ oc new-project dashboard
+$ oc policy add-role-to-user view -z default -n dashboard
+$ oc process -f openshift/break-and-fix-dashboard-template.yaml | oc create -f -
+```
