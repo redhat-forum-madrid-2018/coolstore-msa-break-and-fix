@@ -88,7 +88,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /health
+              path: /api/break/status
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 10
@@ -315,7 +315,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /node
+              path: /api/break/status
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 10
