@@ -59,6 +59,8 @@ objects:
                 fieldPath: metadata.namespace
           - name: JAVA_APP_JAR
             value: break-and-fix-dashboard-1.0.0-SNAPSHOT.war
+          - name: OPENSHIFT_BASE_URL
+            value: 192.168.1.160.xip.io
           image: break-and-fix-dashboard
           imagePullPolicy: IfNotPresent
           livenessProbe:
