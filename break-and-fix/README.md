@@ -150,3 +150,19 @@ oc run siege-load-catalog -n coolstore --restart='OnFailure' --image=siamaksade/
 oc run siege-load-inventory -n coolstore --restart='OnFailure' --image=siamaksade/siege \
   -- -c4 -d2 -t10M -v http://inventory-coolstore.$(minishift ip).nip.io/api/inventory/329299
 ```
+
+# Install Break and Fix Dashboard
+
+Break and Fix Dashboard allows you to play with this repo:
+
+1.- Describe the challenge
+2.- Starting a challenge
+3.- Review the hall of fame
+
+To install it:
+
+```
+$ oc new-project dashboard
+$ oc policy add-role-to-user view -z default -n dashboard
+$ oc process -f openshift/break-and-fix-dashboard-template.yaml | oc create -f -
+```
