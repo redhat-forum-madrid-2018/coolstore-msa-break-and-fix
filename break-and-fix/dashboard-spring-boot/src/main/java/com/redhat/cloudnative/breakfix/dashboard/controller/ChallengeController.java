@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import com.redhat.cloudnative.breakfix.dashboard.service.CompetitorRepository;
 @RequestMapping(value = "/challenge")
 public class ChallengeController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeController.class);
+	
 	@Autowired
 	private CompetitorRepository repository;
 
@@ -81,8 +85,14 @@ public class ChallengeController {
 		
 		String breakUrl = "http://" + service + "-coolstore." + openshiftBaseUrl + "/api/break/" + breakType;
 
-		// TODO Manage exceptions
-		BreakFix breakFix = restTemplate.getForObject(breakUrl, BreakFix.class);
+		BreakFix breakFix;
+		try {
+			breakFix = restTemplate.getForObject(breakUrl, BreakFix.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+			LOGGER.error("Unable to call the break endpoint {}. Exception: {}", breakUrl, e.getMessage(), e);
+			breakFix = new BreakFix(); 
+		}
 
 		// Save and register the new competitor
 		competitor.setStartTime(new Date());
@@ -101,10 +111,24 @@ public class ChallengeController {
 		// Finding Competitor
 		competitor = repository.findOne(competitor.getCompetitorId());
 
-		// Check that everything is running
-		String catalogStatus = restTemplate.getForObject(catalogStatusEndpoint, String.class);
-		String inventoryStatus = restTemplate.getForObject(inventoryStatusEndpoint, String.class);
+		String catalogStatus = "";
+		String inventoryStatus = "";
 
+		try {
+			// Check that everything is running
+			catalogStatus = restTemplate.getForObject(catalogStatusEndpoint, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+			LOGGER.error("Unable to call the break endpoint {}. Exception: {}", catalogStatusEndpoint, e.getMessage(), e);
+		}
+
+		try {
+			inventoryStatus = restTemplate.getForObject(inventoryStatusEndpoint, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+			LOGGER.error("Unable to call the break endpoint {}. Exception: {}", inventoryStatusEndpoint, e.getMessage(), e);
+		}
+		
 		if ("\"OK\"".equals(catalogStatus) && "\"OK\"".equals(inventoryStatus)) {
 			// TODO Save and register the new competitor if everything is right
 			competitor.setStopTime(new Date());
