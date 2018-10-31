@@ -15,3 +15,6 @@ sh 5-coolstore-deploy.sh
 echo ">>>> 5 installing istio enabled coolstore <<<<"
 sh 6-gateway.sh
 echo ">>>> 6 gateway, destination rules, ... <<<<"
+sh 7-dashboard-deploy.sh
+echo ">>>> 7 Break and Fix Dashboard <<<<"
+
