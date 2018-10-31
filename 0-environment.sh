@@ -7,7 +7,7 @@ export ISTIO_PROJECT_NAME="istio-system"
 export OS="linux" # osx | linux
 
 export MINISHIFT_PROFILE="rh-forum-2018"
-export MINISHIFT_MEMORY="8GB"
+export MINISHIFT_MEMORY="12GB"
 export MINISHIFT_CPUS="3"
 export MINISHIFT_VM_DRIVER="kvm" # xhyve | virtualbox | kvm
 export MINISHIFT_DISK_SIZE="50g"
