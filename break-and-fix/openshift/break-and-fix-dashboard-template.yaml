@@ -1,0 +1,209 @@
+apiVersion: v1
+kind: Template
+metadata:
+  demo: break-and-fix-dashboard
+  name: Red-Hat-Forum-Spain-2018-Dashboard
+objects:
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    name: default_edit
+  roleRef:
+    name: view
+  subjects:
+  - kind: ServiceAccount
+    name: default
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: img/icons/spring-boot.svg
+    labels:
+      app: break-and-fix-dashboard
+      group: com.redhat.cloudnative
+      provider: fabric8
+      version: 1.0.0-SNAPSHOT
+    name: break-and-fix-dashboard
+  spec:
+    replicas: 1
+    selector:
+      app: break-and-fix-dashboard
+      group: com.redhat.cloudnative
+      provider: fabric8
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 3600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          fabric8.io/iconUrl: img/icons/spring-boot.svg
+        labels:
+          app: break-and-fix-dashboard
+          group: com.redhat.cloudnative
+          provider: fabric8
+          version: 1.0.0-SNAPSHOT
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: JAVA_APP_JAR
+            value: break-and-fix-dashboard-1.0.0-SNAPSHOT.war
+          - name: OPENSHIFT_BASE_URL
+            value: 192.168.1.160.xip.io
+          image: break-and-fix-dashboard
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: spring-boot
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - spring-boot
+        from:
+          kind: ImageStreamTag
+          name: break-and-fix-dashboard:latest
+          namespace: dashboard
+      type: ImageChange
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: break-and-fix-dashboard
+      group: com.redhat.cloudnative
+      provider: fabric8
+      version: 1.0.0-SNAPSHOT
+    name: break-and-fix-dashboard
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: break-and-fix-dashboard:latest
+    source:
+      contextDir: break-and-fix/dashboard-spring-boot
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_URI}
+        contextDir: break-and-fix/dashboard-spring-boot
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+          - name: ARTIFACT_COPY_ARGS
+            value: '*.war'
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.5-14
+        incremental: true
+      type: Source
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: break-and-fix-dashboard
+    name: break-and-fix-dashboard
+  spec:
+    tags:
+    - name: latest
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    labels:
+      app: break-and-fix-dashboard
+      expose: "true"
+      group: com.redhat.cloudnative
+      provider: fabric8
+      version: 1.0.0-SNAPSHOT
+    name: break-and-fix-dashboard
+  spec:
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: break-and-fix-dashboard
+      weight: 100
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: img/icons/spring-boot.svg
+    labels:
+      app: break-and-fix-dashboard
+      expose: "true"
+      group: com.redhat.cloudnative
+      provider: fabric8
+      version: 1.0.0-SNAPSHOT
+    name: break-and-fix-dashboard
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: break-and-fix-dashboard
+      group: com.redhat.cloudnative
+      provider: fabric8
+    type: ClusterIP
+parameters:
+- description: Git source URI for application
+  displayName: Git source repository
+  name: GIT_URI
+  required: true
+  value: https://github.com/redhat-forum-madrid-2018/coolstore-msa-break-and-fix
+- displayName: Git branch/tag reference
+  name: GIT_REF
+  required: true
+  value: master
+- description: Namespace in which the ImageStreams for Red Hat Middleware images are installed. These ImageStreams are normally installed in the openshift namespace. You should only need to modify this if you've installed the ImageStreams in a different namespace/project.
+  displayName: ImageStream Namespace
+  value: openshift
+  name: IMAGE_STREAM_NAMESPACE
+  required: true
